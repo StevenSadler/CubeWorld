@@ -55,4 +55,52 @@ public class QuadUtils {
         normals.TryGetValue(direction, out norms);
         return norms;
     }
+
+    public static GameObject CreateQuad(Block block, Vector3 direction) {
+        Mesh mesh = new Mesh();
+        mesh.name = "ScriptedMesh";
+
+        mesh.vertices = GetVertices(direction);
+        mesh.normals = GetNormals(direction);
+        mesh.triangles = GetTriangles();
+        mesh.uv = TextureUtils.GetUVs(block.blockType, direction);
+
+        mesh.RecalculateBounds();
+
+        GameObject quad = new GameObject("quad");
+        quad.transform.position = block.position;
+        MeshFilter meshFilter = quad.AddComponent<MeshFilter>();
+        meshFilter.mesh = mesh;
+
+        return quad;
+    }
+
+    public static void CombineQuads(GameObject gameObject, Material cubeMaterial) {
+        Debug.Log("CombineQuads");
+
+        // combine all child meshes
+        MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
+        int limit = meshFilters.Length;
+        CombineInstance[] combine = new CombineInstance[limit];
+        for (int i = 0; i < limit; i++) {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+        }
+
+        // create a new mesh on the parent object
+        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = new Mesh();
+
+        // add combined child meshes to the parent mesh
+        meshFilter.mesh.CombineMeshes(combine);
+
+        // create a renderer for the parent
+        MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+        renderer.material = cubeMaterial;
+
+        // delete all uncombined children
+        foreach (Transform child in gameObject.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
 }

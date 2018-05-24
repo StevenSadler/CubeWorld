@@ -19,7 +19,10 @@ public class Chunk {
         BuildChunk();
     }
 
-    public Chunk(Vector3 position, Material material) {
+    public Chunk(Vector3 position, Material cubeMaterial) {
+        this.position = position;
+        this.cubeMaterial = cubeMaterial;
+        BuildChunk();
         //gameObject = new GameObject(World.BuildChunkName(position));
         //gameObject.transform.position = position;
         //cubeMaterial = material;
@@ -34,7 +37,11 @@ public class Chunk {
             for (int y = 0; y < chunkSize; y++) {
                 for (int x = 0; x < chunkSize; x++) {
                     Vector3 position = new Vector3(x, y, z);
-                    blocks[x, y, z] = new Block(blockType, position);
+                    if (Random.Range(0, 100) < 50) {
+                        blocks[x, y, z] = new Block(blockType, position);
+                    } else {
+                        blocks[x, y, z] = new Block(Block.BlockType.AIR, position);
+                    }
                 }
             }
         }

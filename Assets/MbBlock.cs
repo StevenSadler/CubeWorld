@@ -13,6 +13,7 @@ public class MbBlock : MonoBehaviour {
 	void Start () {
         block = new Block(blockType, Vector3.zero);
         Draw(block);
+        QuadUtils.CombineQuads(gameObject, cubeMaterial);
 	}
 	
 	// Update is called once per frame
@@ -24,7 +25,7 @@ public class MbBlock : MonoBehaviour {
         if (block.blockType == Block.BlockType.AIR) return;
 
         foreach (Vector3 direction in Block.directions) {
-            GameObject quad = block.CreateQuad(direction);
+            GameObject quad = QuadUtils.CreateQuad(block, direction);
             quad.transform.parent = transform;
 
             MeshRenderer renderer = quad.AddComponent<MeshRenderer>();
@@ -35,25 +36,4 @@ public class MbBlock : MonoBehaviour {
             //}
         }
     }
-
-    //private void CreateQuad(Vector3 direction) {
-    //    Mesh mesh = new Mesh();
-    //    mesh.name = "ScriptedMesh";
-
-    //    mesh.vertices = QuadUtils.GetVertices(direction);
-    //    mesh.normals = QuadUtils.GetNormals(direction);
-    //    mesh.triangles = QuadUtils.GetTriangles();
-    //    mesh.uv = TextureUtils.GetUVs(block.blockType, direction);
-
-    //    mesh.RecalculateBounds();
-
-    //    GameObject quad = new GameObject("quad");
-    //    quad.transform.position = block.position;
-    //    quad.transform.parent = transform;
-    //    MeshFilter meshFilter = quad.AddComponent<MeshFilter>();
-    //    meshFilter.mesh = mesh;
-
-    //    MeshRenderer renderer = quad.AddComponent<MeshRenderer>();
-    //    renderer.material = cubeMaterial;
-    //}
 }

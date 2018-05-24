@@ -38,31 +38,7 @@ public class Block
         //this.parent = parent;
         //this.owner = owner;
     }
-
-    public GameObject CreateQuad(Vector3 direction) {
-        Mesh mesh = new Mesh();
-        mesh.name = "ScriptedMesh";
-
-        mesh.vertices = QuadUtils.GetVertices(direction);
-        mesh.normals = QuadUtils.GetNormals(direction);
-        mesh.triangles = QuadUtils.GetTriangles();
-        mesh.uv = TextureUtils.GetUVs(blockType, direction);
-
-        mesh.RecalculateBounds();
-
-        GameObject quad = new GameObject("quad");
-        quad.transform.position = position;
-        MeshFilter meshFilter = quad.AddComponent<MeshFilter>();
-        meshFilter.mesh = mesh;
-
-        return quad;
-    }
-
-    // making highlevel classes compilable
-    //public void Draw() { }
-
-
-
+    
     //public bool HasSolidNeighbor(Vector3 direction) {
     //    if (owner == null) { return false; }
 
@@ -103,38 +79,7 @@ public class Block
 
     //    return false;
     //}
-
-    //public void Draw() {
-    //    if (blockType == BlockType.AIR) return;
-
-    //    foreach (Vector3 direction in directions) {
-    //        CreateQuad(direction);
-    //        //if (!HasSolidNeighbor(direction)) {
-    //        //    CreateQuad(direction);
-    //        //}
-    //    }
-    //}
-
-    //private void CreateQuad(Vector3 direction) {
-    //    Mesh mesh = new Mesh();
-    //    mesh.name = "ScriptedMesh";
-
-    //    mesh.vertices = QuadUtils.GetVertices(direction);
-    //    mesh.normals = QuadUtils.GetNormals(direction);
-    //    mesh.triangles = QuadUtils.GetTriangles();
-    //    mesh.uv = TextureUtils.GetUVs(blockType, direction);
-
-    //    mesh.RecalculateBounds();
-
-    //    GameObject quad = new GameObject("quad");
-    //    quad.transform.position = position;
-    //    quad.transform.parent = parent.transform;
-    //    MeshFilter meshFilter = quad.AddComponent<MeshFilter>();
-    //    meshFilter.mesh = mesh;
-
-    //    MeshRenderer renderer = quad.AddComponent<MeshRenderer>();
-    //    renderer.material = cubeMaterial;
-    //}
+    
 
     //private int ConvertBlockIndexToLocal(int i) {
     //    if (i == -1) {
