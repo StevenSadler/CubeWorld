@@ -6,9 +6,38 @@ public class WorldRenderer : MonoBehaviour {
 
     public void DrawColumn(Dictionary<string, Chunk> chunks, int chunkSize, Material cubeMaterial) {
         foreach (KeyValuePair<string, Chunk> chunk in chunks) {
-            GameObject chunkObject = DrawChunk(chunk.Value, chunkSize);
-            QuadUtils.CombineQuads(chunkObject, cubeMaterial);
+            //GameObject chunkObject = DrawChunk2(chunk.Value, chunkSize, cubeMaterial);
+
+            GameObject chunkObject = DrawChunk3(chunk.Value, chunkSize, cubeMaterial);
+
+            //GameObject chunkObject = DrawChunk(chunk.Value, chunkSize);
+            //QuadUtils.CombineQuads(chunkObject, cubeMaterial);
         }
+    }
+
+    GameObject DrawChunk3(Chunk chunk, int chunkSize, Material cubeMaterial) {
+        // create chunk gameobject to hold quads
+        Vector3 chunkPosition = chunk.position;
+        string chunkName = World.BuildChunkName(chunkPosition);
+        GameObject chunkObject = new GameObject(chunkName);
+        chunkObject.transform.position = chunkPosition;
+        chunkObject.transform.parent = transform;
+
+        chunkObject.AddComponent<ChunkRenderer>();
+        ChunkRenderer chunkRenderer = chunkObject.GetComponent<ChunkRenderer>();
+        chunkRenderer.Draw(chunk, chunkSize, chunkObject, cubeMaterial);
+
+        return chunkObject;
+    }
+
+    GameObject DrawChunk2(Chunk chunk, int chunkSize, Material cubeMaterial) {
+        GameObject chunkObject = new GameObject();
+        chunkObject.AddComponent<ChunkRenderer>();
+
+        ChunkRenderer chunkRenderer = gameObject.GetComponent<ChunkRenderer>();
+        //chunkRenderer.DrawCombined(chunk, chunkSize, cubeMaterial);
+
+        return chunkObject;
     }
 
     GameObject DrawChunk(Chunk chunk, int chunkSize) {

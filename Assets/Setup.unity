@@ -173,6 +173,61 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1538505055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1538505058}
+  - component: {fileID: 1538505057}
+  - component: {fileID: 1538505056}
+  m_Layer: 0
+  m_Name: MainWorld
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1538505056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1538505055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e8aad838777af4ea8ebec90b09c5f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1538505057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1538505055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ff8b496e999a647ae1dc02ceab0c36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columnHeight: 2
+  chunkSize: 8
+  cubeMaterial: {fileID: 2100000, guid: 4a3a4d82979ea95498d57ec4ec87e475, type: 2}
+--- !u!4 &1538505058
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1538505055}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1645443099
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,9 +267,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871b60a4024c7974cb0ff4df23483e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkSize: 4
+  chunkSize: 2
   cubeMaterial: {fileID: 2100000, guid: 4a3a4d82979ea95498d57ec4ec87e475, type: 2}
-  drawCombined: 1
+  drawCombined: 0
 --- !u!4 &1645443102
 Transform:
   m_ObjectHideFlags: 0
