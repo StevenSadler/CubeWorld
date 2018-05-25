@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MbWorld : MonoBehaviour {
-    
-    public static int columnHeight = 2;
-    public static int chunkSize = 8;
-    public static int worldSize = 1;
+
     public static Dictionary<string, Chunk> chunks;
     public static Dictionary<string, GameObject> chunkObjects;
+
+    public int columnHeight = 2;
+    public int chunkSize = 8;
+    //public int worldSize = 2;
 
     public Material textureAtlas;
     public Block.BlockType blockType;  // only used for testing with all the same block type
@@ -17,16 +18,16 @@ public class MbWorld : MonoBehaviour {
         return (int)v.x + "_" + (int)v.y + "_" + (int)v.z;
     }
 
-    public static bool IsOutsideChunk(int x, int y, int z) {
-        return !(x > -1 && x < chunkSize &&
-            y > -1 && y < chunkSize &&
-            z > -1 && z < chunkSize);
-    }
+    //public static bool IsOutsideChunk(int x, int y, int z) {
+    //    return !(x > -1 && x < chunkSize &&
+    //        y > -1 && y < chunkSize &&
+    //        z > -1 && z < chunkSize);
+    //}
 
     IEnumerator BuildChunkColumn() {
         for (int i = 0; i < columnHeight; i++) {
             Vector3 chunkPosition = new Vector3(transform.position.x, i * chunkSize, transform.position.z);
-            Chunk chunk = new Chunk(chunkPosition, chunkSize, blockType, textureAtlas);
+            Chunk chunk = new Chunk(chunkPosition, chunkSize);
             string chunkName = BuildChunkName(chunkPosition);
             chunks.Add(chunkName, chunk);
         }

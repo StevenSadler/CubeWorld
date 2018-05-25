@@ -1,35 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Chunk {
-	
+
     public Block[,,] blocks;
-    public int chunkSize;
     public Vector3 position;
 
-    private Block.BlockType blockType;
-    private Material cubeMaterial;
-
-    public Chunk(Vector3 position, int chunkSize, Block.BlockType blockType, Material cubeMaterial) {
+    public Chunk(Vector3 position, int chunkSize) {
         this.position = position;
-        this.chunkSize = chunkSize;
-        this.blockType = blockType;
-        this.cubeMaterial = cubeMaterial;
-        BuildChunk();
+        BuildChunk(chunkSize);
     }
 
-    public Chunk(Vector3 position, Material cubeMaterial) {
-        this.position = position;
-        this.cubeMaterial = cubeMaterial;
-        BuildChunk();
-        //gameObject = new GameObject(World.BuildChunkName(position));
-        //gameObject.transform.position = position;
-        //cubeMaterial = material;
-        //BuildChunk();
-    }
+    void BuildChunk(int chunkSize) {
+        // need to get chunkSize from world
 
-    void BuildChunk() {
         blocks = new Block[chunkSize, chunkSize, chunkSize];
 
         // create blocks
@@ -37,14 +20,22 @@ public class Chunk {
             for (int y = 0; y < chunkSize; y++) {
                 for (int x = 0; x < chunkSize; x++) {
                     Vector3 position = new Vector3(x, y, z);
-                    if (Random.Range(0, 100) < 50) {
-                        blocks[x, y, z] = new Block(blockType, position);
-                    } else {
-                        blocks[x, y, z] = new Block(Block.BlockType.AIR, position);
-                    }
+
+                    // need to get blocktype from world for each block by its position
+
+                    blocks[x, y, z] = new Block(GetBlockType(position), position);
                 }
             }
         }
+    }
+
+    private Block.BlockType GetBlockType(Vector3 blockPosition) {
+        // calculate blocktype by applying a function such as perlin noise
+        // after adding chunk position and block position vectors
+
+        // for now stub this
+        Block.BlockType blockType = (Random.Range(0, 100) < 50 ? Block.BlockType.GRASS : Block.BlockType.AIR);
+        return blockType;
     }
 
     public bool HasSolidNeighbor(int x, int y, int z, Vector3 direction) {

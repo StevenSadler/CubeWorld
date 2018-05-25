@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class QuadUtils {
+public class QuadUtils
+{
     private static int[] triangles = new int[] { 3, 1, 0, 3, 2, 1 };
 
     // set all vertices for a cube of size 1
@@ -21,7 +21,7 @@ public class QuadUtils {
     private static Vector3[] vLeft = new Vector3[] { p7, p4, p0, p3 };
     private static Vector3[] vRight = new Vector3[] { p5, p6, p2, p1 };
     private static Vector3[] vFront = new Vector3[] { p4, p5, p1, p0 };
-    private static Vector3[] vBack= new Vector3[] { p6, p7, p3, p2 };
+    private static Vector3[] vBack = new Vector3[] { p6, p7, p3, p2 };
 
     private static Dictionary<Vector3, Vector3[]> vertices = new Dictionary<Vector3, Vector3[]>
     {

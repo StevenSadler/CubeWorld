@@ -12,7 +12,7 @@ public class MbChunk : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        chunk = new Chunk(Vector3.zero, chunkSize, blockType, cubeMaterial);
+        chunk = new Chunk(Vector3.zero, chunkSize);
         DrawChunk(chunk);
         QuadUtils.CombineQuads(gameObject, cubeMaterial);
     }
