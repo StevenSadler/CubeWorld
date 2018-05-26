@@ -10,6 +10,7 @@ public class MainBlock : MonoBehaviour {
 	void Start () {
         Block block = new Block(blockType, Vector3.zero);
         BlockRenderer blockRenderer = gameObject.GetComponent<BlockRenderer>();
+
         if (drawCombined) {
             blockRenderer.DrawCombined(block, cubeMaterial);
         } else {

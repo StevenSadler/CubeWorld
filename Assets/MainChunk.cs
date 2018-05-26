@@ -10,6 +10,7 @@ public class MainChunk : MonoBehaviour {
     void Start () {
         Chunk chunk = new Chunk(Vector3.up * chunkSize, chunkSize);
         ChunkRenderer chunkRenderer = gameObject.GetComponent<ChunkRenderer>();
+
         if (drawCombined) {
             chunkRenderer.DrawCombined(chunk, chunkSize, gameObject, cubeMaterial);
         } else {

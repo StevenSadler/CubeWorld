@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class QuadUtils
 {
+    public delegate void RenderDelegate(GameObject gameObject, Material material);
+
     private static int[] triangles = new int[] { 3, 1, 0, 3, 2, 1 };
 
     // set all vertices for a cube of size 1
@@ -75,6 +77,7 @@ public class QuadUtils
         return quad;
     }
 
+    // this is a RenderDelegate
     public static void CombineQuads(GameObject gameObject, Material cubeMaterial) {
         Debug.Log("CombineQuads");
 
@@ -94,13 +97,25 @@ public class QuadUtils
         // add combined child meshes to the parent mesh
         meshFilter.mesh.CombineMeshes(combine);
 
-        // create a renderer for the parent
-        MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
-        renderer.material = cubeMaterial;
+        //// create a renderer for the parent
+        //MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+        //renderer.material = cubeMaterial;
 
         // delete all uncombined children
         foreach (Transform child in gameObject.transform) {
             GameObject.Destroy(child.gameObject);
+        }
+
+        // create a renderer for the parent
+        MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+        renderer.material = cubeMaterial;
+    }
+
+    // this is a RenderDelegate
+    public static void RenderQuads(GameObject gameObject, Material cubeMaterial) {
+        foreach (Transform child in gameObject.transform) {
+            MeshRenderer renderer = child.gameObject.AddComponent<MeshRenderer>();
+            renderer.material = cubeMaterial;
         }
     }
 }

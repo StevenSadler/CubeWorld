@@ -189,7 +189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1538505056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,6 +215,7 @@ MonoBehaviour:
   columnHeight: 2
   chunkSize: 8
   cubeMaterial: {fileID: 2100000, guid: 4a3a4d82979ea95498d57ec4ec87e475, type: 2}
+  drawCombined: 1
 --- !u!4 &1538505058
 Transform:
   m_ObjectHideFlags: 0
@@ -244,7 +245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1645443100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,9 +268,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871b60a4024c7974cb0ff4df23483e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkSize: 2
+  chunkSize: 5
   cubeMaterial: {fileID: 2100000, guid: 4a3a4d82979ea95498d57ec4ec87e475, type: 2}
-  drawCombined: 0
+  drawCombined: 1
 --- !u!4 &1645443102
 Transform:
   m_ObjectHideFlags: 0
