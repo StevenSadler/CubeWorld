@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-public class ChunkRenderer : MonoBehaviour {
-
+public class ChunkRenderer : MonoBehaviour
+{
     public void Draw(Chunk chunk, int chunkSize, GameObject gameObject, Material cubeMaterial) {
         DrawChunk(chunk, chunkSize, gameObject);
         QuadUtils.RenderQuads(gameObject, cubeMaterial);

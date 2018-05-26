@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TextureUtils {
-
+public class TextureUtils
+{
     // col,row for each TextureType
     private static Vector2[] GRASS_TOP = CreateUVs(2, 9);
     private static Vector2[] GRASS_SIDE = CreateUVs(3, 0);
@@ -66,6 +65,4 @@ public class TextureUtils {
     private static Vector2 CreateUVPoint(int x, int y) {
         return new Vector2(x / 16f, (16 - y) / 16f);
     }
-
-    
 }

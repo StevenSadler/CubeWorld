@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-public class MainBlock : MonoBehaviour {
-
+public class MainBlock : MonoBehaviour
+{
     public Block.BlockType blockType;
     public Material cubeMaterial;
     public bool drawCombined;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         Block block = new Block(blockType, Vector3.zero);
         BlockRenderer blockRenderer = gameObject.GetComponent<BlockRenderer>();
 
@@ -16,5 +16,5 @@ public class MainBlock : MonoBehaviour {
         } else {
             blockRenderer.Draw(block, cubeMaterial);
         }
-	}
+    }
 }

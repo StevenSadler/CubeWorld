@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-public class MainChunk : MonoBehaviour {
-
+public class MainChunk : MonoBehaviour
+{
     public int chunkSize;
     public Material cubeMaterial;
     public bool drawCombined;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         Chunk chunk = new Chunk(Vector3.up * chunkSize, chunkSize);
         ChunkRenderer chunkRenderer = gameObject.GetComponent<ChunkRenderer>();
 

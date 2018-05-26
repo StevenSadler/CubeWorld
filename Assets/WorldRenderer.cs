@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldRenderer : MonoBehaviour {
-
+public class WorldRenderer : MonoBehaviour
+{
     public void Draw(Dictionary<string, Chunk> chunks, int chunkSize, Material cubeMaterial) {
         DrawChunks(chunks, chunkSize, cubeMaterial, QuadUtils.RenderQuads);
     }
@@ -13,7 +12,7 @@ public class WorldRenderer : MonoBehaviour {
     }
 
     void DrawChunks(Dictionary<string, Chunk> chunks, int chunkSize, Material cubeMaterial, QuadUtils.RenderDelegate del) {
-        
+
         foreach (KeyValuePair<string, Chunk> chunk in chunks) {
             GameObject chunkObject = AddChunkObject(chunk.Value);
             ChunkRenderer chunkRenderer = chunkObject.GetComponent<ChunkRenderer>();

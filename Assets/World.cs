@@ -1,17 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class World {
+public class World
+{
+    public Dictionary<string, Chunk> chunks;
+    //public Dictionary<string, GameObject> chunkObjects;
 
-    public static Dictionary<string, Chunk> chunks;
-    public static Dictionary<string, GameObject> chunkObjects;
-
-    public World(int columnHeight, int chunkSize) {
+    public World(int columnHeight, int chunkSize, int worldSize) {
         chunks = new Dictionary<string, Chunk>();
-        chunkObjects = new Dictionary<string, GameObject>();
+        //chunkObjects = new Dictionary<string, GameObject>();
 
-        BuildChunkColumn(columnHeight, chunkSize);
+        //BuildChunkColumn(columnHeight, chunkSize);
+        BuildWorld(columnHeight, chunkSize, worldSize);
     }
 
     public static string BuildChunkName(Vector3 v) {
@@ -25,13 +25,18 @@ public class World {
             string chunkName = BuildChunkName(chunkPosition);
             chunks.Add(chunkName, chunk);
         }
-        Debug.Log("chunks Count= " + chunks.Count);
-
-        //foreach (KeyValuePair<string, Chunk> chunk in chunks) {
-        //    GameObject chunkObject = DrawChunk(chunk.Value);
-        //    QuadUtils.CombineQuads(chunkObject, textureAtlas);
-        //}
     }
 
-
+    void BuildWorld(int columnHeight, int chunkSize, int worldSize) {
+        for (int z = 0; z < worldSize; z++) {
+            for (int x = 0; x < worldSize; x++) {
+                for (int y = 0; y < columnHeight; y++) {
+                    Vector3 chunkPosition = new Vector3(x * chunkSize, y * chunkSize, z * chunkSize);
+                    Chunk chunk = new Chunk(chunkPosition, chunkSize);
+                    string chunkName = BuildChunkName(chunkPosition);
+                    chunks.Add(chunkName, chunk);
+                }
+            }
+        }
+    }
 }
