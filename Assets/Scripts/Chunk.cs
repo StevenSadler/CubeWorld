@@ -39,10 +39,14 @@ public class Chunk
     }
 
     private Block.BlockType GetBlockType(int worldX, int worldY, int worldZ) {
-        // calculate blocktype by applying a function such as perlin noise
-        // after adding chunk position and block position vectors
+
+        // check and set block type from the bottom of each column upward
         Block.BlockType blockType;
-        if (worldY <= NoiseUtils.GenerateHeight(worldX, worldZ)) {
+        if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
+            blockType = Block.BlockType.STONE;
+        } else if (worldY < NoiseUtils.GenerateHeight(worldX, worldZ)) {
+            blockType = Block.BlockType.DIRT;
+        } else if (worldY == NoiseUtils.GenerateHeight(worldX, worldZ)) {
             blockType = Block.BlockType.GRASS;
         } else {
             blockType = Block.BlockType.AIR;
