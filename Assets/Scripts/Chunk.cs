@@ -12,9 +12,6 @@ public class Chunk
 
     void BuildChunk(int chunkSize) {
 
-        int testGenerateHeight = NoiseUtils.GenerateHeight(0, 0);
-        //Debug.Log("testGenerateHeight= " + testGenerateHeight);
-
         // need to get chunkSize from world
 
         blocks = new Block[chunkSize, chunkSize, chunkSize];
@@ -40,10 +37,15 @@ public class Chunk
 
     private Block.BlockType GetBlockType(int worldX, int worldY, int worldZ) {
 
-        // check and set block type from the bottom of each column upward
         Block.BlockType blockType;
-        if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
-            blockType = Block.BlockType.STONE;
+        if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 3) < 0.44f) {
+            blockType = Block.BlockType.AIR;
+        } else if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
+            if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 2) < 0.42f) {
+                blockType = Block.BlockType.DIAMOND;
+            } else {
+                blockType = Block.BlockType.STONE;
+            }
         } else if (worldY < NoiseUtils.GenerateHeight(worldX, worldZ)) {
             blockType = Block.BlockType.DIRT;
         } else if (worldY == NoiseUtils.GenerateHeight(worldX, worldZ)) {

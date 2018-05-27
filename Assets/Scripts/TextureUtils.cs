@@ -10,6 +10,7 @@ public class TextureUtils
     private static Vector2[] DIRT = CreateUVs(2, 0);
     private static Vector2[] STONE = CreateUVs(0, 0);
     private static Vector2[] TNT = CreateUVs(8, 0);
+    private static Vector2[] DIAMOND = CreateUVs(2,3);
 
     // map to UVs for non-uniform blocks, only grass blocks for now
     private static Dictionary<Vector3, Vector2[]> grassBlockUVs = new Dictionary<Vector3, Vector2[]>
@@ -27,7 +28,8 @@ public class TextureUtils
     {
         { Block.BlockType.DIRT, DIRT },
         { Block.BlockType.STONE, STONE },
-        { Block.BlockType.TNT, TNT }
+        { Block.BlockType.TNT, TNT },
+        { Block.BlockType.DIAMOND, DIAMOND }
     };
 
     // the only public function, generic getter for uvs for any blockType and any direction quad

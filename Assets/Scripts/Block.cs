@@ -10,6 +10,7 @@ public class Block
         DIRT,
         STONE,
         TNT,
+        DIAMOND,
         AIR
     };
 
