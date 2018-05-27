@@ -12,13 +12,14 @@ public class MainWorld : MonoBehaviour
     void Start() {
         World world = new World(columnHeight, chunkSize, worldSize);
         WorldRenderer worldRenderer = gameObject.GetComponent<WorldRenderer>();
+        worldRenderer.SetModel(world);
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
 
         if (drawCombined) {
-            worldRenderer.DrawCombined(world.chunks, chunkSize, cubeMaterial);
+            worldRenderer.DrawCombined(cubeMaterial);
         } else {
-            worldRenderer.Draw(world.chunks, chunkSize, cubeMaterial);
+            worldRenderer.Draw(cubeMaterial);
         }
     }
 }

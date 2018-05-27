@@ -212,9 +212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ff8b496e999a647ae1dc02ceab0c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columnHeight: 3
-  chunkSize: 4
-  worldSize: 2
+  columnHeight: 2
+  chunkSize: 8
+  worldSize: 1
   cubeMaterial: {fileID: 2100000, guid: 4a3a4d82979ea95498d57ec4ec87e475, type: 2}
   drawCombined: 1
 --- !u!4 &1538505058
