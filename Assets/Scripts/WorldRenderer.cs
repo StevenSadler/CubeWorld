@@ -17,11 +17,14 @@ public class WorldRenderer : MonoBehaviour
         DrawWorld(cubeMaterial, QuadUtils.CombineQuads);
     }
 
+    public void DrawCollide(Material cubeMaterial) {
+        DrawWorld(cubeMaterial, QuadUtils.CollideQuads);
+    }
+
     void DrawWorld(Material cubeMaterial, QuadUtils.RenderDelegate del) {
 
         foreach (KeyValuePair<string, Chunk> chunk in world.chunks) {
             GameObject chunkObject = AddChunkObject(chunk.Value);
-            ChunkRenderer chunkRenderer = chunkObject.GetComponent<ChunkRenderer>();
             DrawWorldChunk(chunk.Value, chunkObject);
 
             del(chunkObject, cubeMaterial);

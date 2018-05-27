@@ -110,6 +110,12 @@ public class QuadUtils
         renderer.material = cubeMaterial;
     }
 
+    public static void CollideQuads(GameObject gameObject, Material cubeMaterial) {
+        CombineQuads(gameObject, cubeMaterial);
+        MeshCollider collider = gameObject.AddComponent<MeshCollider>();
+        collider.sharedMesh = gameObject.transform.GetComponent<MeshFilter>().mesh;
+    }
+
     // this is a RenderDelegate
     public static void RenderQuads(GameObject gameObject, Material cubeMaterial) {
         foreach (Transform child in gameObject.transform) {

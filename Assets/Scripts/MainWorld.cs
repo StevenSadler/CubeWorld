@@ -17,7 +17,8 @@ public class MainWorld : MonoBehaviour
         transform.rotation = Quaternion.identity;
 
         if (drawCombined) {
-            worldRenderer.DrawCombined(cubeMaterial);
+            //worldRenderer.DrawCombined(cubeMaterial);
+            worldRenderer.DrawCollide(cubeMaterial);
         } else {
             worldRenderer.Draw(cubeMaterial);
         }
