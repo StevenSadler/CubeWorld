@@ -79,8 +79,7 @@ public class QuadUtils
 
     // this is a RenderDelegate
     public static void CombineQuads(GameObject gameObject, Material cubeMaterial) {
-        Debug.Log("CombineQuads");
-
+        
         // combine all child meshes
         MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
         int limit = meshFilters.Length;
