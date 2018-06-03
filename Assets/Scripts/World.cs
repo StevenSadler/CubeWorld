@@ -7,7 +7,37 @@ public class World
 
     public int columnHeight;
     public int chunkSize;
+    public int radius;
+
     public int worldSize;
+
+    private BreadthFirstSearch bfs;
+
+    public World(Vector3 chunkPosition, int chunkSize, int radius) {
+        this.chunkSize = chunkSize;
+        this.radius = radius;
+        chunks = new Dictionary<string, Chunk>();
+
+        bfs = new BreadthFirstSearch(radius);
+        BuildStartWorld(chunkPosition);
+
+        //BuildFirstChunk(chunkPosition);
+    }
+
+    void BuildStartWorld(Vector3 firstChunkPosition) {
+        foreach (Vector3 bfsPos in bfs.allNodes) {
+            Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
+            Chunk chunk = new Chunk(chunkPosition, chunkSize);
+            string chunkName = BuildChunkName(chunkPosition);
+            chunks.Add(chunkName, chunk);
+        }
+    }
+
+    void BuildFirstChunk(Vector3 chunkPosition) {
+        Chunk chunk = new Chunk(chunkPosition, chunkSize);
+        string chunkName = BuildChunkName(chunkPosition);
+        chunks.Add(chunkName, chunk);
+    }
 
     public World(int columnHeight, int chunkSize, int worldSize) {
 
