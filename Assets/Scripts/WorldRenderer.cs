@@ -23,7 +23,7 @@ public class WorldRenderer : MonoBehaviour
 
     void DrawWorld(Material cubeMaterial, QuadUtils.RenderDelegate del) {
 
-        foreach (KeyValuePair<string, Chunk> chunk in world.chunks) {
+        foreach (KeyValuePair<string, Chunk> chunk in world.viewChunks) {
             GameObject chunkObject = AddChunkObject(chunk.Value);
             DrawWorldChunk(chunk.Value, chunkObject);
 

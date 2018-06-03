@@ -5,7 +5,17 @@ using UnityEngine;
 
 public class BreadthFirstSearch {
 
-	public static Vector3[] directions = new Vector3[] {
+    public enum WorldType
+    {
+        cube,
+        octahedron,
+        sphere
+    };
+
+    public delegate bool IsInWorld(Vector3 startPosition, Vector3 nextPosition, float radius);
+    public delegate bool IsOnWorldSurface(Vector3 startPosition, Vector3 nextPosition, float radius);
+
+    public static Vector3[] directions = new Vector3[] {
         Vector3.right,
         Vector3.left,
         Vector3.up,
@@ -23,7 +33,21 @@ public class BreadthFirstSearch {
 
     public List<Vector3> allNodes;
 
-	public BreadthFirstSearch(int radius) {
+    IsInWorld isInWorld;
+    IsOnWorldSurface isOnWorldSurface;
+
+    public BreadthFirstSearch(int radius, WorldType worldType) {
+        if (worldType == WorldType.sphere) {
+            isInWorld = IsInSphere;
+            isOnWorldSurface = IsOnSphereSurface;
+        } else if (worldType == WorldType.octahedron) {
+            isInWorld = IsInOctahedron;
+            isOnWorldSurface = IsOnOctahedronSurface;
+        } else {
+            isInWorld = IsInCube;
+            isOnWorldSurface = IsOnCubeSurface;
+        }
+
 		Vector3 startPosition = new Vector3(0,0,0);
 
 		rightHemisphere = new List<Vector3>();
@@ -71,11 +95,11 @@ public class BreadthFirstSearch {
 			foreach (Vector3 direction in directions) {
 				nextNode = current + direction;
 
-				if (!visitedNodes.Contains(nextNode) && IsInSphere(startPosition, nextNode, radius)) {
+				if (!visitedNodes.Contains(nextNode) && isInWorld(startPosition, nextNode, radius)) {
 					nodeQueue.Enqueue(nextNode);
 					visitedNodes.Add(nextNode);
 
-					if (IsOnSphereSurface(startPosition, nextNode, radius)) {
+					if (isOnWorldSurface(startPosition, nextNode, radius)) {
 						AddToHemispheres(startPosition, nextNode, radius);
 					}
 
@@ -95,22 +119,22 @@ public class BreadthFirstSearch {
 		// then add nextPosition to the leading surface for that direction
 
 		Vector3 change = nextPosition - startPosition;
-		if (change.x <= 0 && !IsInSphere(startPosition, nextPosition + Vector3.left, radius)) {
+		if (change.x <= 0 && !isInWorld(startPosition, nextPosition + Vector3.left, radius)) {
 			leftHemisphere.Add(nextPosition);
 		}
-		if (change.x >= 0 && !IsInSphere(startPosition, nextPosition + Vector3.right, radius)) {
+		if (change.x >= 0 && !isInWorld(startPosition, nextPosition + Vector3.right, radius)) {
             rightHemisphere.Add(nextPosition);
 		}
-        if (change.y <= 0 && !IsInSphere(startPosition, nextPosition + Vector3.down, radius)) {
+        if (change.y <= 0 && !isInWorld(startPosition, nextPosition + Vector3.down, radius)) {
             downHemisphere.Add(nextPosition);
         }
-        if (change.y >= 0 && !IsInSphere(startPosition, nextPosition + Vector3.up, radius)) {
+        if (change.y >= 0 && !isInWorld(startPosition, nextPosition + Vector3.up, radius)) {
             upHemisphere.Add(nextPosition);
         }
-        if (change.z <= 0 && !IsInSphere(startPosition, nextPosition + Vector3.back, radius)) {
+        if (change.z <= 0 && !isInWorld(startPosition, nextPosition + Vector3.back, radius)) {
             backHemisphere.Add(nextPosition);
 		}
-		if (change.z >= 0 && !IsInSphere(startPosition, nextPosition + Vector3.forward, radius)) {
+		if (change.z >= 0 && !isInWorld(startPosition, nextPosition + Vector3.forward, radius)) {
             forwardHemisphere.Add(nextPosition);
 		}
 	}
@@ -122,7 +146,8 @@ public class BreadthFirstSearch {
 
 	bool IsOnSphereSurface(Vector3 startPosition, Vector3 nextPosition, float radius) {
 		float distance = (startPosition - nextPosition).magnitude;
-		return (distance <= radius && distance > radius - 1f);
+		//return (distance <= radius && distance > radius - 1f);
+        return Mathf.Ceil(distance) == radius;
 	}
 
 	bool IsInOctahedron(Vector3 startPosition, Vector3 nextPosition, float radius) {
@@ -140,4 +165,20 @@ public class BreadthFirstSearch {
 		float z = Mathf.Abs(change.z);
 		return (x + y + z) == radius;
 	}
+
+    bool IsInCube(Vector3 startPosition, Vector3 nextPosition, float radius) {
+        Vector3 change = startPosition - nextPosition;
+        float x = Mathf.Abs(change.x);
+        float y = Mathf.Abs(change.y);
+        float z = Mathf.Abs(change.z);
+        return x <= radius && y <= radius && z <= radius;
+    }
+
+    bool IsOnCubeSurface(Vector3 startPosition, Vector3 nextPosition, float radius) {
+        Vector3 change = startPosition - nextPosition;
+        float x = Mathf.Abs(change.x);
+        float y = Mathf.Abs(change.y);
+        float z = Mathf.Abs(change.z);
+        return x == radius && y == radius && z == radius;
+    }
 }

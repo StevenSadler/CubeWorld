@@ -297,10 +297,11 @@ MonoBehaviour:
   columnHeight: 1
   chunkSize: 16
   worldSize: 1
-  radius: 3
+  radius: 1
   cubeMaterial: {fileID: 2100000, guid: 4a3a4d82979ea95498d57ec4ec87e475, type: 2}
   player: {fileID: 1682751480}
   drawCombined: 1
+  worldType: 0
 --- !u!4 &1538505058
 Transform:
   m_ObjectHideFlags: 0

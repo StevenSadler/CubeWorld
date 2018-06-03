@@ -9,6 +9,7 @@ public class MainWorld : MonoBehaviour
     public Material cubeMaterial;
     public GameObject player;
     public bool drawCombined;
+    public BreadthFirstSearch.WorldType worldType;
 
     
 
@@ -24,7 +25,7 @@ public class MainWorld : MonoBehaviour
 
 
 
-        World world = new World(chunkPosition, chunkSize, radius);
+        World world = new World(chunkPosition, chunkSize, radius, worldType);
         WorldRenderer worldRenderer = gameObject.GetComponent<WorldRenderer>();
         worldRenderer.SetModel(world);
         transform.position = Vector3.zero;

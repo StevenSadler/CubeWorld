@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class World
 {
-    public Dictionary<string, Chunk> chunks;
+    public Dictionary<string, Chunk> modelChunks;
+    public Dictionary<string, Chunk> viewChunks;
 
     public int columnHeight;
     public int chunkSize;
@@ -11,32 +12,41 @@ public class World
 
     public int worldSize;
 
-    private BreadthFirstSearch bfs;
+    private BreadthFirstSearch bfsModel;
+    private BreadthFirstSearch bfsView;
 
-    public World(Vector3 chunkPosition, int chunkSize, int radius) {
+    public World(Vector3 chunkPosition, int chunkSize, int radius, BreadthFirstSearch.WorldType worldType) {
         this.chunkSize = chunkSize;
         this.radius = radius;
-        chunks = new Dictionary<string, Chunk>();
+        modelChunks = new Dictionary<string, Chunk>();
+        viewChunks = new Dictionary<string, Chunk>();
 
-        bfs = new BreadthFirstSearch(radius);
+        bfsModel = new BreadthFirstSearch(radius + 1, worldType);
+        bfsView = new BreadthFirstSearch(radius, worldType);
         BuildStartWorld(chunkPosition);
 
         //BuildFirstChunk(chunkPosition);
     }
 
     void BuildStartWorld(Vector3 firstChunkPosition) {
-        foreach (Vector3 bfsPos in bfs.allNodes) {
+        foreach (Vector3 bfsPos in bfsModel.allNodes) {
             Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
             Chunk chunk = new Chunk(chunkPosition, chunkSize);
             string chunkName = BuildChunkName(chunkPosition);
-            chunks.Add(chunkName, chunk);
+            modelChunks.Add(chunkName, chunk);
+        }
+        foreach (Vector3 bfsPos in bfsView.allNodes) {
+            Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
+            Chunk chunk = new Chunk(chunkPosition, chunkSize);
+            string chunkName = BuildChunkName(chunkPosition);
+            viewChunks.Add(chunkName, chunk);
         }
     }
 
     void BuildFirstChunk(Vector3 chunkPosition) {
         Chunk chunk = new Chunk(chunkPosition, chunkSize);
         string chunkName = BuildChunkName(chunkPosition);
-        chunks.Add(chunkName, chunk);
+        modelChunks.Add(chunkName, chunk);
     }
 
     public World(int columnHeight, int chunkSize, int worldSize) {
@@ -45,7 +55,7 @@ public class World
         this.chunkSize = chunkSize;
         this.worldSize = worldSize;
 
-        chunks = new Dictionary<string, Chunk>();
+        modelChunks = new Dictionary<string, Chunk>();
         BuildWorld();
     }
 
@@ -56,7 +66,7 @@ public class World
                     Vector3 chunkPosition = new Vector3(x * chunkSize, y * chunkSize, z * chunkSize);
                     Chunk chunk = new Chunk(chunkPosition, chunkSize);
                     string chunkName = BuildChunkName(chunkPosition);
-                    chunks.Add(chunkName, chunk);
+                    modelChunks.Add(chunkName, chunk);
                 }
             }
         }
@@ -79,7 +89,7 @@ public class World
             z = ConvertBlockIndexToLocal(z);
 
             Chunk neighborChunk;
-            if (chunks.TryGetValue(neighborName, out neighborChunk)) {
+            if (modelChunks.TryGetValue(neighborName, out neighborChunk)) {
                 blocks = neighborChunk.blocks;
             } else {
                 return false;
