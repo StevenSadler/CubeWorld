@@ -38,9 +38,10 @@ public class Chunk
     private Block.BlockType GetBlockType(int worldX, int worldY, int worldZ) {
 
         Block.BlockType blockType;
-        if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 3) < 0.44f) {
-            blockType = Block.BlockType.AIR;
-        } else if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
+        //if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 3) < 0.44f) {
+        //    blockType = Block.BlockType.AIR;
+        //} else 
+        if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
             if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 2) < 0.42f) {
                 blockType = Block.BlockType.DIAMOND;
             } else {

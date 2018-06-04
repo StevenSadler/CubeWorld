@@ -4,28 +4,35 @@ using UnityEngine;
 public class World
 {
     public Dictionary<string, Chunk> modelChunks;
-    public Dictionary<string, Chunk> viewChunks;
+    //public Dictionary<string, Chunk> viewChunks;
 
     public int columnHeight;
     public int chunkSize;
     public int radius;
 
     public int worldSize;
+    public Vector3 centerChunkPosition;
 
     private BreadthFirstSearch bfsModel;
-    private BreadthFirstSearch bfsView;
+    //private BreadthFirstSearch bfsView;
 
     public World(Vector3 chunkPosition, int chunkSize, int radius, BreadthFirstSearch.WorldType worldType) {
+        
         this.chunkSize = chunkSize;
         this.radius = radius;
+        centerChunkPosition = chunkPosition;
         modelChunks = new Dictionary<string, Chunk>();
-        viewChunks = new Dictionary<string, Chunk>();
+        //viewChunks = new Dictionary<string, Chunk>();
 
         bfsModel = new BreadthFirstSearch(radius + 1, worldType);
-        bfsView = new BreadthFirstSearch(radius, worldType);
+        //bfsView = new BreadthFirstSearch(radius, worldType);
         BuildStartWorld(chunkPosition);
 
         //BuildFirstChunk(chunkPosition);
+    }
+
+    public bool IsInWorld(Vector3 chunkPosition) {
+        return bfsModel.isInWorld(centerChunkPosition, chunkPosition, radius * chunkSize);
     }
 
     void BuildStartWorld(Vector3 firstChunkPosition) {
@@ -35,12 +42,12 @@ public class World
             string chunkName = BuildChunkName(chunkPosition);
             modelChunks.Add(chunkName, chunk);
         }
-        foreach (Vector3 bfsPos in bfsView.allNodes) {
-            Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
-            Chunk chunk = new Chunk(chunkPosition, chunkSize);
-            string chunkName = BuildChunkName(chunkPosition);
-            viewChunks.Add(chunkName, chunk);
-        }
+        //foreach (Vector3 bfsPos in bfsView.allNodes) {
+        //    Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
+        //    Chunk chunk = new Chunk(chunkPosition, chunkSize);
+        //    string chunkName = BuildChunkName(chunkPosition);
+        //    viewChunks.Add(chunkName, chunk);
+        //}
     }
 
     void BuildFirstChunk(Vector3 chunkPosition) {

@@ -33,7 +33,7 @@ public class BreadthFirstSearch {
 
     public List<Vector3> allNodes;
 
-    IsInWorld isInWorld;
+    public IsInWorld isInWorld;
     IsOnWorldSurface isOnWorldSurface;
 
     public BreadthFirstSearch(int radius, WorldType worldType) {

@@ -23,13 +23,16 @@ public class WorldRenderer : MonoBehaviour
 
     void DrawWorld(Material cubeMaterial, QuadUtils.RenderDelegate del) {
 
-        foreach (KeyValuePair<string, Chunk> chunk in world.viewChunks) {
-            GameObject chunkObject = AddChunkObject(chunk.Value);
-            DrawWorldChunk(chunk.Value, chunkObject);
+        foreach (KeyValuePair<string, Chunk> chunk in world.modelChunks) {
+            // if chunk position is inside render radius
+            if (world.IsInWorld(chunk.Value.position)) {
+                GameObject chunkObject = AddChunkObject(chunk.Value);
+                DrawWorldChunk(chunk.Value, chunkObject);
 
-            del(chunkObject, cubeMaterial);
+                del(chunkObject, cubeMaterial);
 
-            chunkObject.transform.position = chunk.Value.position;
+                chunkObject.transform.position = chunk.Value.position;
+            }
         }
     }
 
