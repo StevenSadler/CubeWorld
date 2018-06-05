@@ -8,14 +8,15 @@ public class MainWorld : MonoBehaviour
     public int radius = 1;
     public Material cubeMaterial;
     public GameObject player;
+    public GameObject centerMark;
     public bool drawCombined;
     public BreadthFirstSearch.WorldType worldType;
 
-    
+    CenterManager centerManager;
 
     // Use this for initialization
     void Start() {
-        Vector3 surfacePosition = new Vector3(10, 0, 10);
+        Vector3 surfacePosition = new Vector3(12, 0, 8);
         int surfaceY = GetSurfaceY(surfacePosition);
         surfacePosition.y = surfaceY;
         int chunkY = surfaceY - surfaceY % chunkSize;
@@ -23,6 +24,8 @@ public class MainWorld : MonoBehaviour
 
         player.transform.position = surfacePosition + Vector3.up * 2;
 
+        centerManager = new CenterManager(player, chunkSize);
+        centerMark.transform.position = centerManager.GetLastCenter();
 
 
         World world = new World(chunkPosition, chunkSize, radius, worldType);
@@ -46,5 +49,12 @@ public class MainWorld : MonoBehaviour
             return grassHeight;
         }
         return stoneHeight;
+    }
+
+    void Update() {
+        if (centerManager.UpdateLastCenter()) {
+
+            centerMark.transform.position = centerManager.GetLastCenter();
+        }
     }
 }
