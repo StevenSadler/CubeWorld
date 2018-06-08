@@ -10,7 +10,7 @@ public class Chunk
         BuildChunk(chunkSize);
     }
 
-    void BuildChunk(int chunkSize) {
+    public void BuildChunk(int chunkSize) {
 
         // need to get chunkSize from world
 
@@ -35,6 +35,28 @@ public class Chunk
         }
     }
 
+    public void ResetChunk(Vector3 position, int chunkSize) {
+        this.position = position;
+
+        // reset blocks
+        for (int z = 0; z < chunkSize; z++) {
+            for (int y = 0; y < chunkSize; y++) {
+                for (int x = 0; x < chunkSize; x++) {
+                    Vector3 blockPosition = new Vector3(x, y, z);
+                    Vector3 pos = blockPosition + position;
+
+                    int worldX = (int)pos.x;
+                    int worldY = (int)pos.y;
+                    int worldZ = (int)pos.z;
+
+                    // need to get blocktype from world for each block by its position
+
+                    blocks[x, y, z].SetBlockType(GetBlockType(worldX, worldY, worldZ));
+                }
+            }
+        }
+    }
+    
     private Block.BlockType GetBlockType(int worldX, int worldY, int worldZ) {
 
         Block.BlockType blockType;
@@ -61,11 +83,17 @@ public class Chunk
     }
 
     public bool HasSolidNeighbor(int x, int y, int z, Vector3 direction) {
+        x += (int)direction.x;
+        y += (int)direction.y;
+        z += (int)direction.z;
         try {
-            return blocks[x + (int)direction.x, y + (int)direction.y, z + (int)direction.z].IsSolid();
+            return blocks[x, y, z].IsSolid();
         }
-        catch (System.IndexOutOfRangeException) { }
-
-        return false;
+        catch (System.IndexOutOfRangeException) {
+            int worldX = x + (int)position.x;
+            int worldY = y + (int)position.y;
+            int worldZ = z + (int)position.z;
+            return Block.IsBlockTypeSolid(GetBlockType(worldX, worldY, worldZ));
+        }
     }
 }

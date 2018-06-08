@@ -42,6 +42,10 @@ public class CenterManager
         return lastCenter;
     }
 
+    public Vector3 GetSecondLastCenter() {
+        return secondLastCenter;
+    }
+
     public bool UpdateLastCenter() {
         Vector3 playerPosition = player.transform.position;
         //Debug.Log("playerPosition = " + playerPosition);

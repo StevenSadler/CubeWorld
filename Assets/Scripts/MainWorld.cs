@@ -14,6 +14,9 @@ public class MainWorld : MonoBehaviour
 
     CenterManager centerManager;
 
+    World world;
+    WorldRenderer worldRenderer;
+
     // Use this for initialization
     void Start() {
         Vector3 surfacePosition = new Vector3(12, 0, 8);
@@ -28,8 +31,8 @@ public class MainWorld : MonoBehaviour
         centerMark.transform.position = centerManager.GetLastCenter();
 
 
-        World world = new World(chunkPosition, chunkSize, radius, worldType);
-        WorldRenderer worldRenderer = gameObject.GetComponent<WorldRenderer>();
+        world = new World(chunkPosition, chunkSize, radius, worldType);
+        worldRenderer = gameObject.GetComponent<WorldRenderer>();
         worldRenderer.SetModel(world);
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
@@ -53,8 +56,54 @@ public class MainWorld : MonoBehaviour
 
     void Update() {
         if (centerManager.UpdateLastCenter()) {
+            Vector3 secondLastCenter = centerManager.GetSecondLastCenter();
+            Vector3 lastCenter = centerManager.GetLastCenter();
 
-            centerMark.transform.position = centerManager.GetLastCenter();
+            centerMark.transform.position = lastCenter;
+            //world.UpdateModel(lastCenter);
+            world.UpdateWorldModel(lastCenter, secondLastCenter);
+            //StartCoroutine(world.UpdateWorldModel());
+            //worldRenderer.UpdateView();
+
+           /*
+            * algorithm
+            * 
+            * 
+            * move the last center
+            * 
+            * check all model chunks 
+            *   if isinworld radius + 1
+            *     mark as keep
+            *   else
+            *     mark as clear
+            *     add to clear model list
+            *     
+            * iterate clear model list
+            *   save position of chunk
+            *   flip position across last center
+            *   create new model chunk
+            *   add model chunk
+            */
+            
+        
+
+
+
+                
+           /*     
+            * check all view chunks
+            *   if isinworld radius
+            *     mark as keep
+            *   else
+            *     mark as clear
+            *     add to clear view list
+            * 
+            * iterate clear view list
+            *   save position of chunk
+            *   flip position across last center
+            *   create new view chunk
+            *   add view chunk
+            */
         }
     }
 }

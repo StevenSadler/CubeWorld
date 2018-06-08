@@ -22,7 +22,15 @@ public class Block
         this.position = position;
     }
 
+    public void SetBlockType(BlockType blockType) {
+        this.blockType = blockType;
+    }
+
     public bool IsSolid() {
+        return blockType != BlockType.AIR;
+    }
+
+    public static bool IsBlockTypeSolid(BlockType blockType) {
         return blockType != BlockType.AIR;
     }
 }

@@ -4,44 +4,92 @@ using UnityEngine;
 public class WorldRenderer : MonoBehaviour
 {
     private World world;
+    public Dictionary<Vector3, GameObject> viewChunks;
+
+    QuadUtils.RenderDelegate del;
+    Material cubeMaterial;
 
     public void SetModel(World world) {
         this.world = world;
+        viewChunks = new Dictionary<Vector3, GameObject>();
     }
 
     public void Draw(Material cubeMaterial) {
-        DrawWorld(cubeMaterial, QuadUtils.RenderQuads);
+        del = QuadUtils.RenderQuads;
+        this.cubeMaterial = cubeMaterial;
+        DrawWorld();
     }
 
     public void DrawCombined(Material cubeMaterial) {
-        DrawWorld(cubeMaterial, QuadUtils.CombineQuads);
+        del = QuadUtils.CombineQuads;
+        this.cubeMaterial = cubeMaterial;
+        DrawWorld();
     }
 
     public void DrawCollide(Material cubeMaterial) {
-        DrawWorld(cubeMaterial, QuadUtils.CollideQuads);
+        del = QuadUtils.CollideQuads;
+        this.cubeMaterial = cubeMaterial;
+        DrawWorld();
     }
 
-    void DrawWorld(Material cubeMaterial, QuadUtils.RenderDelegate del) {
+    public void UpdateView() {
+        Vector3 centerChunkPosition = world.centerChunkPosition;
 
-        foreach (KeyValuePair<string, Chunk> chunk in world.modelChunks) {
+        List<GameObject> clearObjects = new List<GameObject>();
+        foreach (KeyValuePair<Vector3, GameObject> chunkObjectKVPair in viewChunks) {
+            GameObject chunkObject = chunkObjectKVPair.Value;
+            if (!world.IsInWorldView(chunkObject.transform.position)) {
+                clearObjects.Add(chunkObject);
+                viewChunks.Remove(chunkObjectKVPair.Key);
+            }
+        }
+
+        foreach (GameObject clearObject in clearObjects) {
+            // add new chunk opposite the center from the cleared chunk
+            Vector3 chunkPosition = 2 * centerChunkPosition - clearObject.transform.position;
+            Chunk chunk = world.GetChunkAt(chunkPosition);
+
+            GameObject chunkObject = CreateChunkObject(chunk);
+            chunkObject.transform.parent = transform;
+            DrawWorldChunk(chunk, chunkObject);
+
+            del(chunkObject, cubeMaterial);
+
+            // must set chunkObject's position AFTER DrawChunkWorld
+            // so the quads will be in the correct position
+            chunkObject.transform.position = chunkPosition;
+
+
+            viewChunks.Add(chunkPosition, chunkObject);
+
+            Destroy(clearObject);
+        }
+        clearObjects.Clear();
+    }
+
+    void DrawWorld() {
+
+        foreach (KeyValuePair<Vector3, Chunk> chunk in world.modelChunks) {
             // if chunk position is inside render radius
-            if (world.IsInWorld(chunk.Value.position)) {
-                GameObject chunkObject = AddChunkObject(chunk.Value);
+            if (world.IsInWorldView(chunk.Value.position)) {
+                GameObject chunkObject = CreateChunkObject(chunk.Value);
+                chunkObject.transform.parent = transform;
                 DrawWorldChunk(chunk.Value, chunkObject);
 
                 del(chunkObject, cubeMaterial);
 
+                // must set chunkObject's position AFTER DrawChunkWorld
+                // so the quads will be in the correct position
                 chunkObject.transform.position = chunk.Value.position;
             }
         }
     }
 
-    GameObject AddChunkObject(Chunk chunk) {
+    GameObject CreateChunkObject(Chunk chunk) {
         // create chunk gameobject to hold quads
         Vector3 chunkPosition = chunk.position;
         string chunkName = world.BuildChunkName(chunkPosition);
         GameObject chunkObject = new GameObject(chunkName);
-        chunkObject.transform.parent = transform;
         chunkObject.AddComponent<ChunkRenderer>();
 
         return chunkObject;
@@ -69,7 +117,12 @@ public class WorldRenderer : MonoBehaviour
             int ny = (int)neighborBlockPosition.y;
             int nz = (int)neighborBlockPosition.z;
 
-            if (!world.HasSolidNeighbor(nx, ny, nz, chunk, direction)) {
+            //if (!world.HasSolidNeighbor(nx, ny, nz, chunk, direction)) {
+            //    GameObject quad = QuadUtils.CreateQuad(chunk.blocks[x, y, z], direction);
+            //    quad.transform.parent = gameObject.transform;
+            //}
+
+            if (!chunk.HasSolidNeighbor(nx, ny, nz, direction)) {
                 GameObject quad = QuadUtils.CreateQuad(chunk.blocks[x, y, z], direction);
                 quad.transform.parent = gameObject.transform;
             }
