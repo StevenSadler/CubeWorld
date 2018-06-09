@@ -5,9 +5,19 @@ public class Chunk
     public Block[,,] blocks;
     public Vector3 position;
 
+    private GameObject chunkObject;
+
     public Chunk(Vector3 position, int chunkSize) {
         this.position = position;
         BuildChunk(chunkSize);
+    }
+
+    public void SetViewRef(GameObject chunkObject) {
+        this.chunkObject = chunkObject;
+    }
+
+    public GameObject GetViewRef() {
+        return chunkObject;
     }
 
     public void BuildChunk(int chunkSize) {
@@ -95,5 +105,9 @@ public class Chunk
             int worldZ = z + (int)position.z;
             return Block.IsBlockTypeSolid(GetBlockType(worldX, worldY, worldZ));
         }
+    }
+
+    public bool HasSolidNeighbor(Block block, Vector3 direction) {
+        return HasSolidNeighbor(block.getX(), block.getY(), block.getZ(), direction);
     }
 }

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class World
 {
-    //public List<Chunk> modelChunks;
-    public Dictionary<Vector3, Chunk> modelChunks;
-    //public Dictionary<string, Chunk> viewChunks;
+    //public Dictionary<Vector3, Chunk> modelChunks;
+    public List<Chunk> modelChunks;
+    public List<Chunk> moveChunks;
 
     public int columnHeight;
     public int chunkSize;
@@ -17,31 +17,27 @@ public class World
     public Vector3 centerChunkPosition;
 
     private BreadthFirstSearch bfsModel;
-    //private BreadthFirstSearch bfsView;
 
     public World(Vector3 chunkPosition, int chunkSize, int radius, BreadthFirstSearch.WorldType worldType) {
         
         this.chunkSize = chunkSize;
         this.radius = radius;
         centerChunkPosition = chunkPosition;
-        //modelChunks = new List<Chunk>();
-        modelChunks = new Dictionary<Vector3, Chunk>();
-        //viewChunks = new Dictionary<string, Chunk>();
+        //modelChunks = new Dictionary<Vector3, Chunk>();
+        modelChunks = new List<Chunk>();
+        moveChunks = new List<Chunk>();
 
         bfsModel = new BreadthFirstSearch(radius, worldType);
-        //bfsView = new BreadthFirstSearch(radius, worldType);
         BuildStartWorld(chunkPosition);
-
-        //BuildFirstChunk(chunkPosition);
     }
 
-    public Chunk GetChunkAt(Vector3 chunkPosition) {
-        Chunk chunk = null;
-        if (!modelChunks.TryGetValue(chunkPosition, out chunk)) {
-            Debug.Log("World.GetChunkAt() new view chunkPosition not found in modelChunks: " + chunkPosition);
-        }
-        return chunk;
-    }
+    //public Chunk GetChunkAt(Vector3 chunkPosition) {
+    //    Chunk chunk = null;
+    //    if (!modelChunks.TryGetValue(chunkPosition, out chunk)) {
+    //        Debug.Log("World.GetChunkAt() new view chunkPosition not found in modelChunks: " + chunkPosition);
+    //    }
+    //    return chunk;
+    //}
 
     public bool IsInWorldView(Vector3 chunkPosition) {
         return bfsModel.isInWorld(centerChunkPosition, chunkPosition, radius * chunkSize);
@@ -55,7 +51,8 @@ public class World
         foreach (Vector3 bfsPos in bfsModel.allNodes) {
             Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
             Chunk chunk = new Chunk(chunkPosition, chunkSize);
-            modelChunks.Add(chunkPosition, chunk);
+            //modelChunks.Add(chunkPosition, chunk);
+            modelChunks.Add(chunk);
         }
         //foreach (Vector3 bfsPos in bfsView.allNodes) {
         //    Vector3 chunkPosition = firstChunkPosition + bfsPos * chunkSize;
@@ -100,34 +97,36 @@ public class World
     
     public void UpdateWorldModel(Vector3 lastCenter, Vector3 secondLastCenter) {
 
-        List<Chunk> clearChunks = new List<Chunk>();
+        centerChunkPosition = lastCenter;
 
         DebugOut("World UpdateWorld", "radius= " + radius + "  modelChunks.Count= " + modelChunks.Count);
 
-        foreach (KeyValuePair<Vector3, Chunk> chunkKVPair in modelChunks) {
-            Chunk chunk = chunkKVPair.Value;
+        //foreach (KeyValuePair<Vector3, Chunk> chunkKVPair in modelChunks) {
+        //    Chunk chunk = chunkKVPair.Value;
 
+        //    if (!IsInWorldModel(chunk.position)) {
+        //        moveChunks.Add(chunk);
+        //    }
+        //}
+
+        foreach (Chunk chunk in modelChunks) {
             if (!IsInWorldModel(chunk.position)) {
-                clearChunks.Add(chunk);
+                moveChunks.Add(chunk);
             }
         }
 
-        DebugOut("World UpdateWorld", "clearChunks.Count=" + clearChunks.Count);
-        foreach (Chunk clearChunk in clearChunks) {
+        DebugOut("World UpdateWorld", "moveChunks.Count=" + moveChunks.Count);
+        foreach (Chunk moveChunk in moveChunks) {
             // add new chunk opposite the center from the cleared chunk
             Vector3 flipCenter = (lastCenter + secondLastCenter) * 0.5f;
-            Vector3 chunkPosition = 2 * flipCenter - clearChunk.position;
-            modelChunks.Remove(clearChunk.position);
+            Vector3 chunkPosition = 2 * flipCenter - moveChunk.position;
+            //modelChunks.Remove(moveChunk.position);
 
-            clearChunk.ResetChunk(chunkPosition, chunkSize);
+            moveChunk.ResetChunk(chunkPosition, chunkSize);
 
-            modelChunks.Add(chunkPosition, clearChunk);
-
-            //yield return null;
+            //modelChunks.Add(chunkPosition, moveChunk);
         }
         DebugOut("World UpdateWorld", "model update end");
-        clearChunks.Clear();
-        DebugOut("World UpdateWorld", "end");
         
     }
 

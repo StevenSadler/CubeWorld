@@ -22,6 +22,16 @@ public class Block
         this.position = position;
     }
 
+    public int getX() {
+        return (int)(position.x);
+    }
+    public int getY() {
+        return (int)(position.y);
+    }
+    public int getZ() {
+        return (int)(position.z);
+    }
+
     public void SetBlockType(BlockType blockType) {
         this.blockType = blockType;
     }

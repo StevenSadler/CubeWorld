@@ -19,18 +19,18 @@ public class MainWorld : MonoBehaviour
 
     // Use this for initialization
     void Start() {
-        Vector3 surfacePosition = new Vector3(12, 0, 8);
+        Vector3 surfacePosition = new Vector3(12, 0, -3);
         int surfaceY = GetSurfaceY(surfacePosition);
         surfacePosition.y = surfaceY;
         int chunkY = surfaceY - surfaceY % chunkSize;
-        Vector3 chunkPosition = new Vector3(0, chunkY, 0);
+        //Vector3 chunkPosition = new Vector3(0, chunkY, 0);
 
         player.transform.position = surfacePosition + Vector3.up * 2;
 
         centerManager = new CenterManager(player, chunkSize);
         centerMark.transform.position = centerManager.GetLastCenter();
 
-
+        Vector3 chunkPosition = centerMark.transform.position;
         world = new World(chunkPosition, chunkSize, radius, worldType);
         worldRenderer = gameObject.GetComponent<WorldRenderer>();
         worldRenderer.SetModel(world);
@@ -63,7 +63,9 @@ public class MainWorld : MonoBehaviour
             //world.UpdateModel(lastCenter);
             world.UpdateWorldModel(lastCenter, secondLastCenter);
             //StartCoroutine(world.UpdateWorldModel());
-            //worldRenderer.UpdateView();
+            worldRenderer.UpdateView();
+
+            world.moveChunks.Clear();
 
            /*
             * algorithm

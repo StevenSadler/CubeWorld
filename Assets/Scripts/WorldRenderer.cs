@@ -33,25 +33,22 @@ public class WorldRenderer : MonoBehaviour
     }
 
     public void UpdateView() {
+        Debug.Log("WorldRenderer UpdateView started  moveChunks.Count=" + world.moveChunks.Count);
         Vector3 centerChunkPosition = world.centerChunkPosition;
 
-        List<GameObject> clearObjects = new List<GameObject>();
-        foreach (KeyValuePair<Vector3, GameObject> chunkObjectKVPair in viewChunks) {
-            GameObject chunkObject = chunkObjectKVPair.Value;
-            if (!world.IsInWorldView(chunkObject.transform.position)) {
-                clearObjects.Add(chunkObject);
-                viewChunks.Remove(chunkObjectKVPair.Key);
-            }
-        }
+        foreach (Chunk chunk in world.moveChunks) {
+            Vector3 chunkPosition = chunk.position;
+            GameObject chunkObject = chunk.GetViewRef();
+            Destroy(chunkObject);
 
-        foreach (GameObject clearObject in clearObjects) {
-            // add new chunk opposite the center from the cleared chunk
-            Vector3 chunkPosition = 2 * centerChunkPosition - clearObject.transform.position;
-            Chunk chunk = world.GetChunkAt(chunkPosition);
-
-            GameObject chunkObject = CreateChunkObject(chunk);
+            chunkObject = CreateChunkObject(chunk);
             chunkObject.transform.parent = transform;
             DrawWorldChunk(chunk, chunkObject);
+
+            //ResetChunkObject(chunk, chunkObject);
+
+
+            //DrawWorldChunk(chunk, chunkObject);
 
             del(chunkObject, cubeMaterial);
 
@@ -59,28 +56,28 @@ public class WorldRenderer : MonoBehaviour
             // so the quads will be in the correct position
             chunkObject.transform.position = chunkPosition;
 
-
-            viewChunks.Add(chunkPosition, chunkObject);
-
-            Destroy(clearObject);
+            chunk.SetViewRef(chunkObject);
         }
-        clearObjects.Clear();
     }
 
     void DrawWorld() {
 
-        foreach (KeyValuePair<Vector3, Chunk> chunk in world.modelChunks) {
-            // if chunk position is inside render radius
-            if (world.IsInWorldView(chunk.Value.position)) {
-                GameObject chunkObject = CreateChunkObject(chunk.Value);
+        //foreach (KeyValuePair<Vector3, Chunk> chunkKVPair in world.modelChunks) {
+            //Chunk chunk = chunkKVPair.Value;
+        foreach (Chunk chunk in world.modelChunks) {
+                // if chunk position is inside render radius
+                if (world.IsInWorldView(chunk.position)) {
+                GameObject chunkObject = CreateChunkObject(chunk);
                 chunkObject.transform.parent = transform;
-                DrawWorldChunk(chunk.Value, chunkObject);
+                DrawWorldChunk(chunk, chunkObject);
 
                 del(chunkObject, cubeMaterial);
 
                 // must set chunkObject's position AFTER DrawChunkWorld
                 // so the quads will be in the correct position
-                chunkObject.transform.position = chunk.Value.position;
+                chunkObject.transform.position = chunk.position;
+
+                chunk.SetViewRef(chunkObject);
             }
         }
     }
@@ -107,25 +104,25 @@ public class WorldRenderer : MonoBehaviour
     }
 
     void DrawWorldQuads(int x, int y, int z, Chunk chunk, GameObject gameObject) {
-        if (chunk.blocks[x, y, z].IsSolid() == false) return;
+        Block block = chunk.blocks[x, y, z];
+        if (block.IsSolid() == false) return;
 
         foreach (Vector3 direction in Block.directions) {
-
-            // get potential neighbor block x,y,z by incrementing/decrementing my position by direction
-            Vector3 neighborBlockPosition = chunk.blocks[x, y, z].position + direction;
-            int nx = (int)neighborBlockPosition.x;
-            int ny = (int)neighborBlockPosition.y;
-            int nz = (int)neighborBlockPosition.z;
-
-            //if (!world.HasSolidNeighbor(nx, ny, nz, chunk, direction)) {
-            //    GameObject quad = QuadUtils.CreateQuad(chunk.blocks[x, y, z], direction);
-            //    quad.transform.parent = gameObject.transform;
-            //}
-
-            if (!chunk.HasSolidNeighbor(nx, ny, nz, direction)) {
-                GameObject quad = QuadUtils.CreateQuad(chunk.blocks[x, y, z], direction);
+            if (!chunk.HasSolidNeighbor(block, direction)) {
+                GameObject quad = QuadUtils.CreateQuad(block, direction);
                 quad.transform.parent = gameObject.transform;
             }
         }
+    }
+
+    void ResetChunkObject(Chunk chunk, GameObject chunkObject) {
+        chunkObject.transform.position = Vector3.zero;
+
+        Destroy(chunkObject.GetComponent<MeshFilter>().mesh);
+        Destroy(chunkObject.GetComponent<MeshCollider>());
+        Destroy(chunkObject.GetComponent<MeshFilter>());
+        Destroy(chunkObject.GetComponent<MeshRenderer>());
+
+        chunkObject.name = world.BuildChunkName(chunk.position);
     }
 }

@@ -151,6 +151,7 @@ public class BreadthFirstSearch {
 	}
 
 	bool IsInOctahedron(Vector3 startPosition, Vector3 nextPosition, float radius) {
+        Debug.Log("IsInOctahedron  startPosition=" + startPosition + "  nextPosition=" + nextPosition + "  radius=" + radius);
 		Vector3 change = startPosition - nextPosition;
 		float x = Mathf.Abs(change.x);
 		float y = Mathf.Abs(change.y);
