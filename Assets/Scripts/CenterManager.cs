@@ -12,7 +12,6 @@ public class CenterManager
     //Vector3 lastPlayerPosition;
     Vector3 lastCenter;
     Vector3 secondLastCenter;
-    bool centerMoved;
 
     public CenterManager(GameObject player, int chunkSize) {
         this.chunkSize = chunkSize;
@@ -27,7 +26,7 @@ public class CenterManager
 
         lastCenter = ConvertWorldToChunk(player.transform.position);
 
-        secondLastCenter = new Vector3(lastCenter.x, lastCenter.y, lastCenter.z);
+        secondLastCenter = ConvertWorldToChunk(player.transform.position);
     }
 
     Vector3 ConvertWorldToChunk(Vector3 worldPos) {
@@ -49,28 +48,23 @@ public class CenterManager
     public bool UpdateLastCenter() {
         Vector3 playerPosition = player.transform.position;
         //Debug.Log("playerPosition = " + playerPosition);
-        centerMoved = false;
+        bool centerMoved = false;
+        Vector3 oldCenter = lastCenter;
 
         // negative axis directions
 
         // moving left
         if (lastCenter.x > playerPosition.x + chunkSize) {
-            Debug.Log("moved left");
-            PrepCenterMoveX();
             lastCenter.x = Mathf.Ceil(playerPosition.x);
         }
 
         // moving down
         if (lastCenter.y > playerPosition.y + chunkSize) {
-            Debug.Log("moved down");
-            PrepCenterMoveY();
             lastCenter.y = Mathf.Ceil(playerPosition.y);
         }
 
         // moving back
         if (lastCenter.z > playerPosition.z + chunkSize) {
-            Debug.Log("moved back");
-            PrepCenterMoveZ();
             lastCenter.z = Mathf.Ceil(playerPosition.z);
         }
 
@@ -79,42 +73,23 @@ public class CenterManager
 
         // moving right
         if (lastCenter.x < playerPosition.x - chunkSize) {
-            Debug.Log("moved right");
-            PrepCenterMoveX();
             lastCenter.x = Mathf.Floor(playerPosition.x);
         }
 
         // moving up
         if (lastCenter.y < playerPosition.y - chunkSize) {
-            Debug.Log("moved up");
-            PrepCenterMoveY();
             lastCenter.y = Mathf.Floor(playerPosition.y);
         }
 
         // moving forward
         if (lastCenter.z < playerPosition.z - chunkSize) {
-            Debug.Log("moved forward");
-            PrepCenterMoveZ();
             lastCenter.z = Mathf.Floor(playerPosition.z);
         }
 
-
+        if (lastCenter != oldCenter) {
+            secondLastCenter = oldCenter;
+            centerMoved = true;
+        }
         return centerMoved;
     }
-
-    void PrepCenterMoveX() {
-        secondLastCenter.x = lastCenter.x;
-        centerMoved = true;
-    }
-
-    void PrepCenterMoveY() {
-        secondLastCenter.y = lastCenter.y;
-        centerMoved = true;
-    }
-
-    void PrepCenterMoveZ() {
-        secondLastCenter.z = lastCenter.z;
-        centerMoved = true;
-    }
-
 }

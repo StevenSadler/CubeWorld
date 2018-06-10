@@ -38,10 +38,10 @@ public class WorldRenderer : MonoBehaviour
 
         foreach (Chunk chunk in world.moveChunks) {
             Vector3 chunkPosition = chunk.position;
-            GameObject chunkObject = chunk.GetViewRef();
-            Destroy(chunkObject);
+            //GameObject chunkObject = chunk.GetViewRef();
+            //Destroy(chunkObject);
 
-            chunkObject = CreateChunkObject(chunk);
+            GameObject chunkObject = CreateChunkObject(chunk);
             chunkObject.transform.parent = transform;
             DrawWorldChunk(chunk, chunkObject);
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using UnityEngine;
 
 public class MainWorld : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class MainWorld : MonoBehaviour
     World world;
     WorldRenderer worldRenderer;
 
+    float frameStartTime;
+
     // Use this for initialization
     void Start() {
-        Vector3 surfacePosition = new Vector3(12, 0, -3);
+        Vector3 surfacePosition = new Vector3(0, 0, 0);
         int surfaceY = GetSurfaceY(surfacePosition);
         surfacePosition.y = surfaceY;
         int chunkY = surfaceY - surfaceY % chunkSize;
@@ -55,15 +58,25 @@ public class MainWorld : MonoBehaviour
     }
 
     void Update() {
+        frameStartTime = Time.realtimeSinceStartup;
+
         if (centerManager.UpdateLastCenter()) {
             Vector3 secondLastCenter = centerManager.GetSecondLastCenter();
             Vector3 lastCenter = centerManager.GetLastCenter();
-
+            
             centerMark.transform.position = lastCenter;
             //world.UpdateModel(lastCenter);
+
+            FrameDebugOut("MainWorld Update", "start  lastCenter=" + lastCenter + "  secondLastCenter=" + secondLastCenter);
+
             world.UpdateWorldModel(lastCenter, secondLastCenter);
+
+            FrameDebugOut("MainWorld Update", "after model update");
+
             //StartCoroutine(world.UpdateWorldModel());
             worldRenderer.UpdateView();
+
+            FrameDebugOut("MainWorld Update", "after view update");
 
             world.moveChunks.Clear();
 
@@ -107,5 +120,15 @@ public class MainWorld : MonoBehaviour
             *   add view chunk
             */
         }
+    }
+
+    public void FrameDebugOut(string message1, string message2) {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(message1);
+        sb.Append("  ");
+        sb.Append(message2);
+        sb.Append("  ");
+        sb.Append(Time.realtimeSinceStartup - frameStartTime);
+        Debug.Log(sb.ToString());
     }
 }

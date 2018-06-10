@@ -26,6 +26,7 @@ public class Chunk
 
         blocks = new Block[chunkSize, chunkSize, chunkSize];
 
+        
         // create blocks
         for (int z = 0; z < chunkSize; z++) {
             for (int y = 0; y < chunkSize; y++) {
@@ -70,9 +71,31 @@ public class Chunk
     private Block.BlockType GetBlockType(int worldX, int worldY, int worldZ) {
 
         Block.BlockType blockType;
-        //if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 3) < 0.44f) {
-        //    blockType = Block.BlockType.AIR;
-        //} else 
+        if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
+            if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 2) < 0.42f) {
+                blockType = Block.BlockType.DIAMOND;
+            } else {
+                blockType = Block.BlockType.STONE;
+            }
+        } else if (worldY < NoiseUtils.GenerateHeight(worldX, worldZ)) {
+            blockType = Block.BlockType.DIRT;
+        } else if (worldY == NoiseUtils.GenerateHeight(worldX, worldZ)) {
+            blockType = Block.BlockType.GRASS;
+        } else {
+            blockType = Block.BlockType.AIR;
+        }
+
+        // for now stub this
+        //blockType = (Random.Range(0, 100) < 50 ? Block.BlockType.GRASS : Block.BlockType.AIR);
+        return blockType;
+    }
+
+    private Block.BlockType GetBlockTypeOld(int worldX, int worldY, int worldZ) {
+
+        Block.BlockType blockType;
+        if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 3) < 0.44f) {
+            blockType = Block.BlockType.AIR;
+        } else 
         if (worldY <= NoiseUtils.GenerateStoneHeight(worldX, worldZ)) {
             if (NoiseUtils.FractalBrownianMotion3D(worldX, worldY, worldZ, 0.1f, 2) < 0.42f) {
                 blockType = Block.BlockType.DIAMOND;

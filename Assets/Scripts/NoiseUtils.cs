@@ -2,19 +2,26 @@
 
 public class NoiseUtils
 {
-    static int maxHeight = 150;
+    static int minHeight = 4;
+    static int maxHeight = 12;
     static float smooth = 0.01f;
     static int octaves = 4;
     static float persistence = 0.5f;
     static int offset = 20000;
 
     public static int GenerateStoneHeight(float x, float z) {
-        float height = Map(0, maxHeight - 5, 0, 1, FractalBrownianMotion(x * smooth * 2, z * smooth * 2, octaves + 1, persistence));
+        //float height = Map(minHeight, maxHeight - 5, 0, 1, FractalBrownianMotion(x * smooth * 2, z * smooth * 2, octaves + 1, persistence));
+        float height = FractalBrownianMotion(x * smooth * 2, z * smooth * 2, octaves + 1, persistence);
+        height = Mathf.Pow(height, 4);
+        height = height * 100 + 5;
         return (int)height;
     }
 
     public static int GenerateHeight(float x, float z) {
-        float height = Map(0, maxHeight, 0, 1, FractalBrownianMotion(x * smooth, z * smooth, octaves, persistence));
+        //float height = Map(minHeight, maxHeight, 0, 1, FractalBrownianMotion(x * smooth, z * smooth, octaves, persistence));
+        float height = FractalBrownianMotion(x * smooth, z * smooth, octaves, persistence);
+        height = Mathf.Pow(height, 3);
+        height = height * 100 + 20;
         return (int)height;
     }
 

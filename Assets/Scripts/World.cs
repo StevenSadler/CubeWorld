@@ -96,10 +96,10 @@ public class World
     }
     
     public void UpdateWorldModel(Vector3 lastCenter, Vector3 secondLastCenter) {
-
+        StringBuilder sb = new StringBuilder();
         centerChunkPosition = lastCenter;
 
-        DebugOut("World UpdateWorld", "radius= " + radius + "  modelChunks.Count= " + modelChunks.Count);
+        sb.Append(DebugOut("World UpdateWorld", "radius= " + radius + "  modelChunks.Count= " + modelChunks.Count));
 
         //foreach (KeyValuePair<Vector3, Chunk> chunkKVPair in modelChunks) {
         //    Chunk chunk = chunkKVPair.Value;
@@ -112,31 +112,35 @@ public class World
         foreach (Chunk chunk in modelChunks) {
             if (!IsInWorldModel(chunk.position)) {
                 moveChunks.Add(chunk);
+                GameObject.Destroy(chunk.GetViewRef());
             }
         }
-
-        DebugOut("World UpdateWorld", "moveChunks.Count=" + moveChunks.Count);
+        
+        Vector3 flipCenter = (lastCenter + secondLastCenter) * 0.5f;
+        sb.Append(DebugOut("World UpdateWorld", "lastCenter=" + lastCenter + "  secondLastCenter=" + secondLastCenter + "  flipCenter=" + flipCenter));
         foreach (Chunk moveChunk in moveChunks) {
             // add new chunk opposite the center from the cleared chunk
-            Vector3 flipCenter = (lastCenter + secondLastCenter) * 0.5f;
             Vector3 chunkPosition = 2 * flipCenter - moveChunk.position;
             //modelChunks.Remove(moveChunk.position);
+
+            sb.Append(DebugOut("World UpdateWorld", "oldChunkPosition=" + moveChunk.position + "  newChunkPosition=" + chunkPosition));
+
+
 
             moveChunk.ResetChunk(chunkPosition, chunkSize);
 
             //modelChunks.Add(chunkPosition, moveChunk);
         }
-        DebugOut("World UpdateWorld", "model update end");
-        
+        //DebugOut("World UpdateWorld", "model update end");
+        Debug.Log(sb.ToString());
     }
 
-    public void DebugOut(string message1, string message2) {
+    public string DebugOut(string message1, string message2) {
         StringBuilder sb = new StringBuilder();
         sb.Append(message1);
         sb.Append("  ");
         sb.Append(message2);
-        sb.Append("  ");
-        sb.Append(Time.realtimeSinceStartup);
-        Debug.Log(sb.ToString());
+        sb.Append("\n");
+        return sb.ToString();
     }
 }
