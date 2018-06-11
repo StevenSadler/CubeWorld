@@ -55,17 +55,20 @@ public class CenterManager
 
         // moving left
         if (lastCenter.x > playerPosition.x + chunkSize) {
-            lastCenter.x = Mathf.Ceil(playerPosition.x);
+            //lastCenter.x = Mathf.Ceil(playerPosition.x);
+            lastCenter.x -= chunkSize;
         }
 
         // moving down
         if (lastCenter.y > playerPosition.y + chunkSize) {
-            lastCenter.y = Mathf.Ceil(playerPosition.y);
+            //lastCenter.y = Mathf.Ceil(playerPosition.y);
+            lastCenter.y -= chunkSize;
         }
 
         // moving back
         if (lastCenter.z > playerPosition.z + chunkSize) {
-            lastCenter.z = Mathf.Ceil(playerPosition.z);
+            //lastCenter.z = Mathf.Ceil(playerPosition.z);
+            lastCenter.z -= chunkSize;
         }
 
 
@@ -73,17 +76,20 @@ public class CenterManager
 
         // moving right
         if (lastCenter.x < playerPosition.x - chunkSize) {
-            lastCenter.x = Mathf.Floor(playerPosition.x);
+            //lastCenter.x = Mathf.Floor(playerPosition.x);
+            lastCenter.x += chunkSize;
         }
 
         // moving up
         if (lastCenter.y < playerPosition.y - chunkSize) {
-            lastCenter.y = Mathf.Floor(playerPosition.y);
+            //lastCenter.y = Mathf.Floor(playerPosition.y);
+            lastCenter.y -= chunkSize;
         }
 
         // moving forward
         if (lastCenter.z < playerPosition.z - chunkSize) {
-            lastCenter.z = Mathf.Floor(playerPosition.z);
+            //lastCenter.z = Mathf.Floor(playerPosition.z);
+            lastCenter.z += chunkSize;
         }
 
         if (lastCenter != oldCenter) {
